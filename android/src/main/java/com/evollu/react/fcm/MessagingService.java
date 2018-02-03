@@ -83,10 +83,12 @@ public class MessagingService extends FirebaseMessagingService {
             return;
         }
         Map<String, String> data = remoteMessage.getData();
-        String customNotification = data.get("custom_notification");
+        String customNotification = data.get("data");
         if(customNotification != null){
             try {
-                Bundle bundle = BundleJSONConverter.convertToBundle(new JSONObject(customNotification));
+                JSONObject customNotificationJSON = new JSONObject(customNotification);
+                String customData = customNotificationJSON.getString("data");
+                Bundle bundle = BundleJSONConverter.convertToBundle(new JSONObject(customData));
                 FIRLocalMessagingHelper helper = new FIRLocalMessagingHelper(this.getApplication());
                 helper.sendNotification(bundle);
             } catch (JSONException e) {
