@@ -65,13 +65,30 @@ public class MessagingService extends FirebaseMessagingService {
             return;
         }
 
-        Map data = remoteMessage.getData();
-        if (data.get("badge") == null) {
+        Map<String, String> data = remoteMessage.getData();
+        String customNotification = data.get("data");
+
+        if(customNotification == null){
+            return;
+        }
+
+        String badge = null;
+        try {
+            JSONObject customNotificationJSON = new JSONObject(customNotification);
+            String customData = customNotificationJSON.getString("data");
+            JSONObject customDataJson = new JSONObject(customData);
+            badge = customDataJson.getString("badge");
+        } catch (Exception e) {
+            Log.e(TAG, "Custom parsing failed", e);
+            return;
+        }
+
+        if (badge == null) {
             return;
         }
 
         try {
-            int badgeCount = Integer.parseInt((String)data.get("badge"));
+            int badgeCount = Integer.parseInt(badge);
             badgeHelper.setBadgeCount(badgeCount);
         } catch (Exception e) {
             Log.e(TAG, "Badge count needs to be an integer", e);
