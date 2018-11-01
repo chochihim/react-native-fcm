@@ -78,7 +78,8 @@ public class SendNotificationTask extends AsyncTask<Void, Void, Void> {
             String subText = bundle.getString("sub_text");
             if (subText != null) subText = URLDecoder.decode( subText, "UTF-8" );
 
-            NotificationCompat.Builder notification = new NotificationCompat.Builder(mContext, bundle.getString("channel"))
+            // NotificationCompat.Builder notification = new NotificationCompat.Builder(mContext, bundle.getString("channel"))
+            NotificationCompat.Builder notification = new NotificationCompat.Builder(mContext, res.getString(R.string.default_notification_channel_id))
                     .setContentTitle(title)
                     .setContentText(body)
                     .setTicker(ticker)
